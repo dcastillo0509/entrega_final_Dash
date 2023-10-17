@@ -11,25 +11,50 @@ from backend.granulometria import granulometria
 #importa las librerías necesarias
 
 
+def generate_granulometria_plot():
+    trace = go.Scatter(
+        x=granulometria['Abertura'][0:11],
+        y=granulometria['Por_Pasa'][0:11],
+        mode='lines',
+        line=dict(color='black', width=2),
+        name='Curva Granulométrica'
+    )
+    
+    layout = go.Layout(
+        title='Curva Granulométrica',
+        xaxis=dict(
+            title='Tamiz (mm)',
+            type='log',
+            autorange=True
+        ),
+        yaxis=dict(
+            title='Porcentaje Pasa Acumulado %',
+            range=[0, 100]
+        )
+    )
+
+    return {'data': [trace], 'layout': layout}
+
+
 centro=dbc.Container([
       #crea la variable derecho y en ella un Container
       html.H1('Datos del Proyecto', style={'color':'#17242d'}),#Crea un titulo 1 y define el color del texto
       html.Hr(),#añade un espacio
 
-      html.Label('Ingrese Peso Retenido', style={'color':'#17242d'}), 
-    dash_table.DataTable(
-        id='tabla_granulometria',
-        columns=[
-            {'name': 'Malla', 'id': 'Malla','editable': False},
-            {'name': 'Abertura', 'id': 'Abertura','editable': False},
-            {'name': 'Retenido', 'id': 'Retenido', 'editable': True},
-            {'name': 'Retenido_acum', 'id': 'Retenido_acum', 'editable': False},
-            {'name': 'Pasa', 'id': 'Pasa', 'editable': False},
-            {'name': 'Por_Pasa', 'id': 'Por_Pasa', 'editable': False},
+      html.Label('Ingrese Peso Retenido', style={'color':'#17242d'}), #crea una etiqueta de texto
+    dash_table.DataTable(#crea una tabla
+        id='tabla_granulometria',#identifica la tabla como tabla_granulometria
+        columns=[#crea una serie de columnas de la tabla
+            {'name': 'Malla', 'id': 'Malla','editable': False},#nombra, identifica, y configura para edición la columna 1
+            {'name': 'Abertura', 'id': 'Abertura','editable': False},#nombra, identifica, y configura para edición la columna 2
+            {'name': 'Retenido', 'id': 'Retenido', 'editable': True},#nombra, identifica, y configura para edición la columna 3
+            {'name': 'Retenido_acum', 'id': 'Retenido_acum', 'editable': False},#nombra, identifica, y configura para edición la columna 4
+            {'name': 'Pasa', 'id': 'Pasa', 'editable': False},#nombra, identifica, y configura para edición la columna 5
+            {'name': 'Por_Pasa', 'id': 'Por_Pasa', 'editable': False},#nombra, identifica, y configura para edición la columna 6
             ],
-            data=granulometria.to_dict('records')
+            data=granulometria.to_dict('records')#convierte el DataFrame a diccionario
             ),
-            dcc.Graph(id='granulometria_plot'),
+            dcc.Graph(id='granulometria_plot'),#crea la gráfica y la identifica con granulometria_plot
 
             html.Label('Ingrese Datos Adicionales:', style={'color': '#17242d'}),
             #Se crea una etiqueta (texto) y define el color
@@ -45,31 +70,6 @@ centro=dbc.Container([
             #se crea un Input con identificador, valor por defecto, tipo numero y rango
             html.Br(),
 ],fluid=True)
-
-
-def generate_granulometria_plot():
-    trace = go.Scatter(
-        x=granulometria['Abertura'][0:11],
-        y=granulometria['Por_Pasa'][0:11],
-        mode='lines',
-        line=dict(color='black', width=2),
-        name='Curva Granulométrica'
-    )
-    
-    layout1 = go.Layout(
-        title='Curva Granulométrica',
-        xaxis=dict(
-            title='Tamiz (mm)',
-            type='log',
-            autorange=True
-        ),
-        yaxis=dict(
-            title='Porcentaje Pasa Acumulado %',
-            range=[0, 100]
-        )
-    )
-
-    return {'data': [trace], 'layout1': layout1}
 
 
 def update_granulometria_table(rows, columns):
