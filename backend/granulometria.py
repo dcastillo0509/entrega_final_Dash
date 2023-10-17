@@ -4,7 +4,9 @@ os.chdir(os.path.dirname(__file__))
 import pandas as pd
 import matplotlib.pyplot as plt #importar la librería matplotlib
 from scipy.interpolate import interp1d #Importar la librería scipy para poder interpolar
-
+from operator import ipow
+from matplotlib import axes
+import numpy as np
 
 malla=[ # Para las mallas
     "1 1/2", #Tamiz 11/2"
@@ -206,3 +208,74 @@ else:
      print("Es un limo de baja plasticidad (ML) Verificar en la carta de plasticidad")
   if indicePlasticidad > 7: #significa que está arriba de la línea A
      print("Es una arcilla de baja plasticidad (CL) Verificar en la carta de plasticidad")
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+#CARTA DE PLASTICIDAD
+
+# Condicionamos la carta de plasticidad debido a que si es una arena limpia o una grava limpia no se usa la carta de plasticidad
+# Determinar cada uno de los parametros que debe llevar la carta de plasticidad  
+
+if Pasa_Tamiz_200>= 5:
+
+  # variable que se usa para  añadir texto a la grafica
+  ax = plt.axes() 
+  # variable que se usa para  añadir texto a la grafica
+  # Valores que tomará en x la gráfica para la línea A
+  lineaAx = np.linspace(0,100,10)
+  # Valores que tomará en y la gráfica para la línea A
+  lineaAy=[0.73*(i-20) for i in lineaAx ] 
+  # Valores que tomará en x la gráfica para la línea B
+  lineaBx = np.linspace(0,100,10)
+  # Valores que tomará en y la gráfica para la línea B
+  lineaBy=[0.9*(i-8) for i in lineaAx ] 
+  # Valores que tomara en x para limitar la linea cuando y=4
+  lineaCx = np.array([((4+8*0.9)/0.9),((4+20*0.73)/0.73)])  
+  lineaCy = [ 4 for i in lineaCx ]
+  # Valores que tomara en x para limitar la linea cuando y=7
+  lineaDx = np.array([((7+8*0.9)/0.9),((7+20*0.73)/0.73)])  
+  lineaDy = [ 7 for i in lineaCx ]
+  lineaEy = np.linspace(0,100,10) 
+  lineaEx = [ 50 for i in lineaEy ]
+  
+  plt.title("CARTA DE PLASTICIDAD",fontsize=18)
+  # se ingresa las diferentes rectas que clasifican el suelo en la carta de plasticidad
+
+  plt.plot(lineaAx,lineaAy, label = "Linea A",  color = "black") 
+  plt.text(82, 49, 'Línea A',size = 12, rotation = 35)
+  plt.plot(lineaBx, lineaBy, label = "Linea B", linestyle = '--', color = "black")
+  plt.text(70, 60, 'Línea U',size = 12, rotation = 35)
+  plt.plot(lineaCx, lineaCy,color = "black",linestyle = '--')
+  plt.plot(lineaDx, lineaDy, linestyle = '--', color = "black" )
+  
+
+  plt.plot(lineaEx,lineaEy, color = "black")
+  plt.grid(color = 'black', linewidth = 0.7)
+
+  # Comandos que funcionan para añadirle color a la grafica entre las líneas
+  plt.fill_between(lineaBx, lineaAy, lineaBy, color='peachpuff',alpha = 1.0)
+  plt.fill_between(lineaCx, lineaCy, lineaDy, color='red', alpha = 0.2)
+  plt.fill_between(lineaBx, lineaAy, color='cyan', alpha = 0.2)
+  
+  # Se configura el límite horizontal
+  plt.xlim(0, 100)       
+  # Se configura el límite vertical 
+  plt.ylim(0, 70)            
+  
+  # Se usa el siguiente comando para añadirle el texto a la gráfica
+  ax.text(63,43, "CH U OH", style ="normal",fontsize=8,
+          bbox={"facecolor": "white", "alpha": 0.4, "pad":2})
+  ax.text(63,23, "MH U OH", style ="normal",fontsize=8,
+          bbox={"facecolor": "white", "alpha": 0.4, "pad":2})
+  ax.text(23,23, "CL U OL", style ="normal",fontsize=8,
+          bbox={"facecolor": "white", "alpha": 0.4, "pad":2})
+  ax.text(35,5, "ML U OL", style ="normal",fontsize=8,
+          bbox={"facecolor": "white", "alpha": 0.4, "pad":2})
+  ax.text(4,7, "CL U ML", style ="normal",fontsize=8,
+          bbox={"facecolor": "none", "alpha": 0.4, "pad":2})
+  
+  # Se añade el nombre de los ejes
+  plt.scatter(limliquido, indicePlasticidad, alpha = 1, color = "black")
+  plt.xlabel("Límite líquido ",fontsize=14)
+  plt.ylabel("Indice de plasticidad",fontsize=14)
+  
+  plt.show() 
+
