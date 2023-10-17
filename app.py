@@ -35,7 +35,7 @@ def update_tabla_centro(rows, columns):
 
 
 @app.callback(
-    Output('granulometria-plot', 'figure'),
+    Output('granulometria_plot', 'figure'),
     [Input('tabla_granulometria', 'data')]
 )
 

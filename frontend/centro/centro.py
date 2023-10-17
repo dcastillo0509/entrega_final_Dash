@@ -56,7 +56,7 @@ def generate_granulometria_plot():
         name='Curva Granulométrica'
     )
     
-    layout = go.Layout(
+    layout1 = go.Layout(
         title='Curva Granulométrica',
         xaxis=dict(
             title='Tamiz (mm)',
@@ -69,7 +69,7 @@ def generate_granulometria_plot():
         )
     )
 
-    return {'data': [trace], 'layout': layout}
+    return {'data': [trace], 'layout1': layout1}
 
 
 def update_granulometria_table(rows, columns):
