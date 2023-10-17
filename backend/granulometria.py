@@ -277,5 +277,5 @@ if Pasa_Tamiz_200>= 5:
   plt.xlabel("Límite líquido ",fontsize=14)
   plt.ylabel("Indice de plasticidad",fontsize=14)
   
-  plt.show() 
+  
 
