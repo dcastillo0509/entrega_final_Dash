@@ -68,7 +68,7 @@ granulometria["Por_Pasa"]= round(granulometria["Pasa"]*100/granulometria["Reteni
 #INTERPOLACIÓN
 # Determinar los diametros para los cuales pasa el 10%, 30% y 60% del material
 from scipy.interpolate import interp1d
-x = granulometria["Porcentaje Pasa"]
+x = granulometria["Por_Pasa"]
 y = abertura
 
 interpolate_x = 10
