@@ -5,7 +5,7 @@ import math #se importa math
 import pandas as pd
 import plotly.tools as tls
 import plotly.graph_objs as go
-
+#importa las librerías necesarias
 
 #Se importa frontend
 from frontend.main import layout
