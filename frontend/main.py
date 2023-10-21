@@ -8,7 +8,7 @@ from .navegador.navegador import navegador #importa container de navegador
 from .centro.centro import centro #importa container de centro
 from .inferior.inferior import inferior #importa container de inferior
 
-imagen_fondo = 'url("https://geotecniaymecanicasuelosabc.com/wp-content/uploads/2021/05/TIPOS-DE-SUELOS.jpg")'
+imagen_fondo = 'url("https://images.unsplash.com/photo-1617634667039-8e4cb277ab46?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmF0dXJhbGV6YSUyMHBhaXNhamV8ZW58MHx8MHx8fDA%3D")'
 #crea variable con el url de la imagen de fondo
 
 layout=dbc.Container([ #en la variable layout, crea container de toda la página web
