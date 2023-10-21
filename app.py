@@ -15,7 +15,7 @@ from frontend.centro.centro import generate_granulometria_plot
 
 app=dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 #crea la variable app y agrega __name__ y los estilos con bootstrap
-
+server = app.server
 app.layout = layout #se asigna el layout en la variable layout de app
 
 
