@@ -193,9 +193,10 @@ print("Tamiz No.4 =" , Tamiz_4 )
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # CLASIFICAIÓN DEL SUELO
-print("El TIPO DE SUELO ES = ")
-
-# SUELOS DE PARTICULAS GRUESAS
+def clasificacion_suelo(Tamiz_200, Tamiz_4, Cu, Cc, indicePlasticidad, limLiquido):
+    resultado = "El TIPO DE SUELO ES = "
+    
+    # SUELOS DE PARTICULAS GRUESAS
 if Tamiz_200 < 50:
  print("Suelo de partículas gruesas")
 
@@ -300,6 +301,8 @@ else:
      print("Es un limo de baja plasticidad (ML) Verificar en la carta de plasticidad")
   if indicePlasticidad > 7: #significa que está arriba de la línea A
      print("Es una arcilla de baja plasticidad (CL) Verificar en la carta de plasticidad")
+
+
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 #CARTA DE PLASTICIDAD
