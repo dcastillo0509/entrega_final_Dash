@@ -12,6 +12,7 @@ from frontend.main import layout
 from frontend.centro.centro import update_granulometria_table
 from frontend.centro.centro import update_granulometria_plot
 from frontend.centro.centro import generate_granulometria_plot
+from backend.backend1 import plot_plasticity_chart
 
 app=dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 #crea la variable app y agrega __name__ y los estilos con bootstrap
