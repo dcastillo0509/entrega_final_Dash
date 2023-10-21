@@ -3,6 +3,7 @@ import pandas as pd
 from operator import ipow
 from matplotlib import axes
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 
 # Determinar la granulomeria como un diccionario de python
@@ -115,30 +116,38 @@ print(Granulometria)
 
 #CURVA GRANULOMETRICA CON LIMITES
 # Establecer cual la información con la que se realizara la grafica
-plt.plot(Tamiz, Granulometria["Porcentaje Pasa"], color='m', lw=2, linestyle = '--') 
-plt.grid(color='red', ls='-.', lw = .2)
-plt.plot(Tamiz, LimiteSuperior , color='yellow', linestyle='-', label="Limite Superior")
-plt.plot(Tamiz, LimiteInferior, color='blue', linestyle='-', label="Limite Inferior")
+def plot_granulometric_curve(Tamiz, Porcentaje_Pasa, LimiteSuperior, LimiteInferior):
+    fig, ax = plt.subplots()
+    
+    # Configurar la gráfica principal
+    ax.plot(Tamiz, Porcentaje_Pasa, color='m', lw=2, linestyle='--', label="Curva Granulométrica")
+    
+    # Configurar las líneas de límite
+    ax.plot(Tamiz, LimiteSuperior, color='yellow', linestyle='-', label="Limite Superior")
+    ax.plot(Tamiz, LimiteInferior, color='blue', linestyle='-', label="Limite Inferior")
+    
+    # Nombrar los ejes
+    ax.set_title("Curva Granulométrica", fontsize=15)
+    ax.set_xlabel("Tamiz (mm)", fontsize=12)
+    ax.set_ylabel("% Pasa", fontsize=12)
+    ax.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+    
+    # Escala logarítmica en el eje x
+    ax.set_xscale('log')
+    
+    # Invertir el eje x
+    ax.invert_xaxis()
+    
+    # Grilla en el eje x (escala logarítmica)
+    ax.grid(True, which="minor", linestyle='-')
+    
+    # Grilla normal en el eje y
+    ax.grid(True, which='minor', linestyle='-', label="Granulometría del suelo")
+    
+    plt.show()
 
-# Nombrar los ejes
-plt.title("Curva granulometrica", fontsize=15)
-plt.xlabel("Tamiz (mm)",fontsize=12)
-plt.ylabel(" % Pasa",fontsize=12)
-plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
-
-# Escala logaritmica
-plt.xscale('log', basex=10)
-
-# Linea codigo que invierte el eje x
-plt.gca().invert_xaxis()
-
-# Grilla log en eje x
-plt.grid(True, which="minor", linestyle='-')
-       
-# grilla normal en eje y
-plt.grid(True, which='minor', linestyle='-', label="Granulometria del suelo")
-plt.grid()
-plt.show()   
+# Llama a la función proporcionando los datos necesarios
+plot_granulometric_curve(Tamiz, Granulometria["Porcentaje Pasa"], LimiteSuperior, LimiteInferior)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Ingresar el valor del limite liquido y del inice de plasticidad
@@ -298,67 +307,58 @@ else:
 # Condicionamos la carta de plasticidad debido a que si es una arena limpia o una grava limpia no se usa la carta de plasticidad
 # Determinar cada uno de los parametros que debe llevar la carta de plasticidad  
 
-if Tamiz_200 >= 5:
+def plot_plasticity_chart(limLiquido, indicePlasticidad):
+    if Tamiz_200 < 5:
+        print()
+        return
 
-  # variable que se usa para  añadir texto a la grafica
-  ax = plt.axes() 
-  # variable que se usa para  añadir texto a la grafica
-  # Valores que tomará en x la gráfica para la línea A
-  lineaAx = np.linspace(0,100,10)
-  # Valores que tomará en y la gráfica para la línea A
-  lineaAy=[0.73*(i-20) for i in lineaAx ] 
-  # Valores que tomará en x la gráfica para la línea B
-  lineaBx = np.linspace(0,100,10)
-  # Valores que tomará en y la gráfica para la línea B
-  lineaBy=[0.9*(i-8) for i in lineaAx ] 
-  # Valores que tomara en x para limitar la linea cuando y=4
-  lineaCx = np.array([((4+8*0.9)/0.9),((4+20*0.73)/0.73)])  
-  lineaCy = [ 4 for i in lineaCx ]
-  # Valores que tomara en x para limitar la linea cuando y=7
-  lineaDx = np.array([((7+8*0.9)/0.9),((7+20*0.73)/0.73)])  
-  lineaDy = [ 7 for i in lineaCx ]
-  lineaEy = np.linspace(0,100,10) 
-  lineaEx = [ 50 for i in lineaEy ]
-  
-  plt.title("CARTA DE PLASTICIDAD",fontsize=18)
-  # se ingresa las diferentes rectas que clasifican el suelo en la carta de plasticidad
+    fig, ax = plt.subplots()
+    
+    # Valores para la gráfica
+    lineaAx = np.linspace(0, 100, 10)
+    lineaAy = [0.73 * (i - 20) for i in lineaAx]
+    lineaBx = np.linspace(0, 100, 10)
+    lineaBy = [0.9 * (i - 8) for i in lineaAx]
+    lineaCx = np.array([((4 + 8 * 0.9) / 0.9), ((4 + 20 * 0.73) / 0.73)])
+    lineaCy = [4 for i in lineaCx]
+    lineaDx = np.array([((7 + 8 * 0.9) / 0.9), ((7 + 20 * 0.73) / 0.73)])
+    lineaDy = [7 for i in lineaCx]
+    lineaEy = np.linspace(0, 100, 10)
+    lineaEx = [ 50 for i in lineaEy ]
+    
+    plt.title("CARTA DE PLASTICIDAD", fontsize=18)
 
-  plt.plot(lineaAx,lineaAy, label = "Linea A",  color = "black") 
-  plt.text(82, 49, 'Línea A',size = 12, rotation = 35)
-  plt.plot(lineaBx, lineaBy, label = "Linea B", linestyle = '--', color = "black")
-  plt.text(70, 60, 'Línea U',size = 12, rotation = 35)
-  plt.plot(lineaCx, lineaCy,color = "black",linestyle = '--')
-  plt.plot(lineaDx, lineaDy, linestyle = '--', color = "black" )
-  
+    # Rectas de clasificación
+    plt.plot(lineaAx, lineaAy, label="Linea A", color="black")
+    plt.text(82, 49, 'Línea A', size=12, rotation=35)
+    plt.plot(lineaBx, lineaBy, label="Linea U", linestyle='--', color="black")
+    plt.text(70, 60, 'Línea U', size=12, rotation=35)
+    plt.plot(lineaCx, lineaCy, color="black", linestyle='--')
+    plt.plot(lineaDx, lineaDy, linestyle='--', color="black")
+    plt.plot(lineaEx, lineaEy, color="black")
+    
+    # Rellenar áreas entre las líneas
+    plt.fill_between(lineaBx, lineaAy, lineaBy, color='peachpuff', alpha=1.0)
+    plt.fill_between(lineaCx, lineaCy, lineaDy, color='red', alpha=0.2)
+    plt.fill_between(lineaBx, lineaAy, color='cyan', alpha=0.2)
+    
+    # Configurar límites
+    plt.xlim(0, 100)
+    plt.ylim(0, 70)
+    
+    # Añadir texto a la gráfica
+    ax.text(63, 43, "CH U OH", style="normal", fontsize=8, bbox={"facecolor": "white", "alpha": 0.4, "pad": 2})
+    ax.text(63, 23, "MH U OH", style="normal", fontsize=8, bbox={"facecolor": "white", "alpha": 0.4, "pad": 2})
+    ax.text(23, 23, "CL U OL", style="normal", fontsize=8, bbox={"facecolor": "white", "alpha": 0.4, "pad": 2})
+    ax.text(35, 5, "ML U OL", style="normal", fontsize=8, bbox={"facecolor": "white", "alpha": 0.4, "pad": 2})
+    ax.text(4, 7, "CL U ML", style="normal", fontsize=8, bbox={"facecolor": "none", "alpha": 0.4, "pad": 2})
+    
+    # Añadir el nombre de los ejes
+    plt.scatter(limLiquido, indicePlasticidad, alpha=1, color="black")
+    plt.xlabel("Límite líquido", fontsize=14)
+    plt.ylabel("Índice de plasticidad", fontsize=14)
+    
+    plt.show()
 
-  plt.plot(lineaEx,lineaEy, color = "black")
-  plt.grid(color = 'black', linewidth = 0.7)
-
-  # Comandos que funcionan para añadirle color a la grafica entre las líneas
-  plt.fill_between(lineaBx, lineaAy, lineaBy, color='peachpuff',alpha = 1.0)
-  plt.fill_between(lineaCx, lineaCy, lineaDy, color='red', alpha = 0.2)
-  plt.fill_between(lineaBx, lineaAy, color='cyan', alpha = 0.2)
-  
-  # Se configura el límite horizontal
-  plt.xlim(0, 100)       
-  # Se configura el límite vertical 
-  plt.ylim(0, 70)            
-  
-  # Se usa el siguiente comando para añadirle el texto a la gráfica
-  ax.text(63,43, "CH U OH", style ="normal",fontsize=8,
-          bbox={"facecolor": "white", "alpha": 0.4, "pad":2})
-  ax.text(63,23, "MH U OH", style ="normal",fontsize=8,
-          bbox={"facecolor": "white", "alpha": 0.4, "pad":2})
-  ax.text(23,23, "CL U OL", style ="normal",fontsize=8,
-          bbox={"facecolor": "white", "alpha": 0.4, "pad":2})
-  ax.text(35,5, "ML U OL", style ="normal",fontsize=8,
-          bbox={"facecolor": "white", "alpha": 0.4, "pad":2})
-  ax.text(4,7, "CL U ML", style ="normal",fontsize=8,
-          bbox={"facecolor": "none", "alpha": 0.4, "pad":2})
-  
-  # Se añade el nombre de los ejes
-  plt.scatter(limLiquido, indicePlasticidad, alpha = 1, color = "black")
-  plt.xlabel("Límite líquido ",fontsize=14)
-  plt.ylabel("Indice de plasticidad",fontsize=14)
-  
-  plt.show()
+# Llama a la función proporcionando los datos necesarios
+plot_plasticity_chart(limLiquido, indicePlasticidad)
